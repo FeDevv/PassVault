@@ -43,6 +43,11 @@ public class Account {
         this.encryptedPassword = parts[3];
     }
 
+    public boolean matches(Account other){
+        return this.platform.equalsIgnoreCase(other.platform) &&
+                this.email.equalsIgnoreCase(other.email);
+    }
+
     @Override
     public String toString() {
         return "↪ " + platform + " ⇨ " +

@@ -52,7 +52,7 @@ public class AccountFileDAO implements AccountDAO {
 
         for (Account account : accounts) {
             if (account.getPlatform().equalsIgnoreCase(platform)) {
-                System.out.println("The following account has been found: " + account.toString());
+                System.out.println("The following account has been found: " + account);
                 return account;
             }
         }
@@ -78,19 +78,70 @@ public class AccountFileDAO implements AccountDAO {
         } else {
             System.out.println(matchingAccounts.size() + " matching accounts have been found with username: " + username);
         }
-
-        return matchingAccounts; // Restituisci una lista vuota se non ci sono account corrispondenti
+        // Restituisci una lista vuota se non ci sono account corrispondenti
+        return matchingAccounts;
     }
 
-
     @Override
-    public void deleteAccount(Account account) {
-        //rimuovere un account dal file
+    public void deleteAccount(Account deleteAccount) {
+       List<Account> accounts = getAll();
+       List<Account> updatedAccounts = new ArrayList<>();
+       boolean found = false;
+
+       for(Account account : accounts){
+           if(account.matches(deleteAccount)){
+               found = true;
+               System.out.println("Account with matching platform found. Removing it from file.");
+           }else{
+               updatedAccounts.add(account);
+           }
+       }
+
+       if(!found){
+           System.out.println("No account found with platform: " + deleteAccount.getPlatform());
+           return;
+       }
+
+       try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+           for(Account account : updatedAccounts){
+               writer.write(account.toFileString());
+               writer.newLine();
+           }
+           System.out.println("Account deleted successfully.");
+       }catch(IOException e){
+           System.err.println("Error while updating the file: " + e.getMessage());
+       }
     }
 
     @Override
     public void updateAccount(Account updatedAccount) {
-        //aggiornare un account
-    }
+        List<Account> accounts = getAll();
+        List<Account> updatedAccounts = new ArrayList<>();
+        boolean updated = false;
 
+        for (Account account : accounts) {
+            if (account.getPlatform().equalsIgnoreCase(updatedAccount.getPlatform())) {     //ricerca per piattaforma
+                updatedAccounts.add(updatedAccount); // sostituisce quello vecchio
+                updated = true;
+                System.out.println("Account with matching platform found. Updating information.");
+            } else {
+                updatedAccounts.add(account); // mantiene quelli non coinvolti
+            }
+        }
+
+        if(!updated){
+            System.out.println("No account found with platform: " + updatedAccount.getPlatform());
+            return;
+        }
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+            for(Account account : updatedAccounts){
+                writer.write(account.toFileString());
+                writer.newLine();
+            }
+            System.out.println("Account updated successfully.");
+        }catch(IOException e){
+            System.err.println("Error while updating the file: " + e.getMessage());
+        }
+    }
 }
