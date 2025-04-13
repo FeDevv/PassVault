@@ -45,6 +45,7 @@ public class Account {
 
     public boolean matches(Account other){
         return this.platform.equalsIgnoreCase(other.platform) &&
+                this.username.equalsIgnoreCase(other.username) &&
                 this.email.equalsIgnoreCase(other.email);
     }
 

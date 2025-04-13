@@ -29,7 +29,7 @@ public class AccountFileDAO implements AccountDAO {
         }catch(IOException e){
             System.err.println("Error while writing to file: " + e.getMessage());
         }
-    }
+    }       //salva un account su file --> password viene criptata
 
     @Override
     public List<Account> getAll() {
@@ -44,23 +44,26 @@ public class AccountFileDAO implements AccountDAO {
             System.err.println("Error while reading file: " + e.getMessage());
         }
         return accounts;
-    }
+    }       //prende gli account dal file --> hanno password criptate
 
     @Override
-    public Account findByPlatform(String platform) {
+    public List<Account> findByPlatform(String platform) {
         List<Account> accounts = getAll();
+        List<Account> matchingAccounts = new ArrayList<>();
 
         for (Account account : accounts) {
             if (account.getPlatform().equalsIgnoreCase(platform)) {
-                System.out.println("The following account has been found: " + account);
-                return account;
+                matchingAccounts.add(account);
             }
         }
-
-        System.out.println("No account with platform '" + platform + "' found.");
-        return null;
+        if (matchingAccounts.isEmpty()) {
+            System.out.println("No matching account found with platform: " + platform);
+        } else {
+            System.out.println(matchingAccounts.size() + " matching accounts have been found with platform: " + platform);
+        }
+        // Restituisci una lista vuota se non ci sono account corrispondenti
+        return matchingAccounts;
     }
-
 
     @Override
     public List<Account> findByUsername(String username) {
@@ -84,53 +87,55 @@ public class AccountFileDAO implements AccountDAO {
 
     @Override
     public void deleteAccount(Account deleteAccount) {
-       List<Account> accounts = getAll();
-       List<Account> updatedAccounts = new ArrayList<>();
-       boolean found = false;
+        List<Account> accounts = getAll();
+        List<Account> updatedAccounts = new ArrayList<>();
+        boolean found = false;
 
-       for(Account account : accounts){
-           if(account.matches(deleteAccount)){
-               found = true;
-               System.out.println("Account with matching platform found. Removing it from file.");
-           }else{
-               updatedAccounts.add(account);
-           }
-       }
+        for(Account account : accounts){
+            if(account.matches(deleteAccount)){
+                found = true;
+                System.out.println("Account with matching information found. Removing it from file.");
+            }else{
+                updatedAccounts.add(account);
+            }
+        }
 
-       if(!found){
-           System.out.println("No account found with platform: " + deleteAccount.getPlatform());
-           return;
-       }
+        if(!found){
+            System.out.println("No account found with the following info: " +
+                    deleteAccount.getPlatform() + ", " + deleteAccount.getUsername() + ", " + deleteAccount.getEmail());
+            return;
+        }
 
-       try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
-           for(Account account : updatedAccounts){
-               writer.write(account.toFileString());
-               writer.newLine();
-           }
-           System.out.println("Account deleted successfully.");
-       }catch(IOException e){
-           System.err.println("Error while updating the file: " + e.getMessage());
-       }
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+            for(Account account : updatedAccounts){
+                writer.write(account.toFileString());
+                writer.newLine();
+            }
+            System.out.println("Account deleted successfully.");
+        }catch(IOException e){
+            System.err.println("Error while updating the file: " + e.getMessage());
+        }
     }
 
     @Override
-    public void updateAccount(Account updatedAccount) {
+    public void updateAccount(Account updatedAccount, Account oldAccount) {
         List<Account> accounts = getAll();
         List<Account> updatedAccounts = new ArrayList<>();
         boolean updated = false;
 
         for (Account account : accounts) {
-            if (account.getPlatform().equalsIgnoreCase(updatedAccount.getPlatform())) {     //ricerca per piattaforma
+            if (account.matches(oldAccount)) {     //ricerca per piattaforma
                 updatedAccounts.add(updatedAccount); // sostituisce quello vecchio
                 updated = true;
-                System.out.println("Account with matching platform found. Updating information.");
+                System.out.println("Account with matching information found. Updating information.");
             } else {
                 updatedAccounts.add(account); // mantiene quelli non coinvolti
             }
         }
 
         if(!updated){
-            System.out.println("No account found with platform: " + updatedAccount.getPlatform());
+            System.out.println("No account found with info: " + oldAccount.getPlatform() + ", "
+            + oldAccount.getUsername() + ", " + oldAccount.getEmail());
             return;
         }
 
