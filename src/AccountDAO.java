@@ -5,6 +5,6 @@ public interface AccountDAO {
     List<Account> getAll();
     List<Account> findByPlatform(String platform);
     List<Account> findByUsername(String username);
-    void deleteAccount(Account account);
-    void updateAccount(Account updatedAccount, Account oldAccount);
+    void deleteAccount(String platform, String username, String email, String password);
+    void updateAccount(String platform, String username, String email, String password, Account newAccount);
 }

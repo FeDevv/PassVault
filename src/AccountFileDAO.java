@@ -4,7 +4,7 @@ import java.util.List;
 import java.io.*;
 
 public class AccountFileDAO implements AccountDAO {
-    private File file;
+    private final File file;
 
     public AccountFileDAO(String fileName) {
         this.file = new File(fileName);
@@ -86,13 +86,13 @@ public class AccountFileDAO implements AccountDAO {
     }
 
     @Override
-    public void deleteAccount(Account deleteAccount) {
+    public void deleteAccount(String platform, String username, String email, String password) {
         List<Account> accounts = getAll();
         List<Account> updatedAccounts = new ArrayList<>();
         boolean found = false;
 
         for(Account account : accounts){
-            if(account.matches(deleteAccount)){
+            if(account.matchesCredentials(platform, username, email) && account.verifyPassword(password)){
                 found = true;
                 System.out.println("Account with matching information found. Removing it from file.");
             }else{
@@ -102,7 +102,7 @@ public class AccountFileDAO implements AccountDAO {
 
         if(!found){
             System.out.println("No account found with the following info: " +
-                    deleteAccount.getPlatform() + ", " + deleteAccount.getUsername() + ", " + deleteAccount.getEmail());
+                    platform + ", " + username + ", " + email + ", " + password);
             return;
         }
 
@@ -118,24 +118,24 @@ public class AccountFileDAO implements AccountDAO {
     }
 
     @Override
-    public void updateAccount(Account updatedAccount, Account oldAccount) {
+    public void updateAccount(String platform, String username, String email, String password, Account newAccount) {
         List<Account> accounts = getAll();
         List<Account> updatedAccounts = new ArrayList<>();
         boolean updated = false;
 
         for (Account account : accounts) {
-            if (account.matches(oldAccount)) {     //ricerca per piattaforma
-                updatedAccounts.add(updatedAccount); // sostituisce quello vecchio
+            if (account.matchesCredentials(platform, username, email) && account.verifyPassword(password)) {
+                System.out.println("Account with matching information found. Updating file");// sostituisce quello vecchio
+                updatedAccounts.add(newAccount);
                 updated = true;
-                System.out.println("Account with matching information found. Updating information.");
             } else {
                 updatedAccounts.add(account); // mantiene quelli non coinvolti
             }
         }
 
         if(!updated){
-            System.out.println("No account found with info: " + oldAccount.getPlatform() + ", "
-            + oldAccount.getUsername() + ", " + oldAccount.getEmail());
+            System.out.println("No account found with info: " + platform + ", "
+            + username + ", " + email + ", " + password);
             return;
         }
 

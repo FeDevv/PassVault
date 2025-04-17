@@ -9,7 +9,7 @@ public class Account {
         this.platform = platform;
         this.username = username;
         this.email = email;
-        this.encryptedPassword = CryptoUtils.encrypt(plainPassword);
+        this.encryptedPassword = CryptoUtils.encrypt(plainPassword, SessionManager.getMasterPassword());
     }
 
     // Getter
@@ -25,8 +25,19 @@ public class Account {
         return platform;
     }
 
+    /*
     public String getEncryptedPassword() {
         return encryptedPassword;
+    }
+    */
+
+    public String getDecryptedPassword() {
+        try {
+            return CryptoUtils.decrypt(encryptedPassword, SessionManager.getMasterPassword());
+        } catch (CryptoUtils.CryptoException e) {
+            System.err.println("Failed to decrypt password: " + e.getMessage());
+            return "[DECRYPTION ERROR]"; // O un valore di fallback
+        }
     }
 
     //crea una stringa formattata a partire dall'account da poter mettere sul file
@@ -43,17 +54,18 @@ public class Account {
         this.encryptedPassword = parts[3];
     }
 
-    public boolean matches(Account other){
-        return this.platform.equalsIgnoreCase(other.platform) &&
-                this.username.equalsIgnoreCase(other.username) &&
-                this.email.equalsIgnoreCase(other.email);
+    public boolean matchesCredentials(String platform, String username, String email){
+        return this.platform.equalsIgnoreCase(platform) &&
+                this.username.equalsIgnoreCase(username) &&
+                this.email.equalsIgnoreCase(email);
+    }
+
+    public boolean verifyPassword(String inputPassword){
+        return getDecryptedPassword().equals(inputPassword);
     }
 
     @Override
     public String toString() {
-        return "↪ " + platform + " ⇨ " +
-                "Username: " + username +
-                "\nEmail: " + email +
-                "\npassword: " + encryptedPassword;
+        return "▢ " + getPlatform() + " ⇨ Username: " + getUsername() + " | Email: " + getEmail() + " | password: " + getDecryptedPassword();
     }
 }

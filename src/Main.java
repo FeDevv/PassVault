@@ -11,7 +11,7 @@ public class Main {
         System.out.println("4. Find accounts by username");
         System.out.println("5. Update an account");
         System.out.println("6. Delete an account");
-        System.out.println("0. Exit");
+        System.out.println("0. Exit\n");
     }
 
     public static void addAccount(Scanner sc, AccountFileDAO dao){
@@ -21,10 +21,10 @@ public class Main {
         System.out.print("Insert username: ");
         String username = sc.nextLine();
 
-        System.out.println("Insert email");
+        System.out.print("Insert email: ");
         String email = sc.nextLine();
 
-        System.out.println("Insert password: ");
+        System.out.print("Insert password: ");
         String password = sc.nextLine();
 
         Account account = new Account(platform, username, email, password);
@@ -80,22 +80,22 @@ public class Main {
         String oldUsername = sc.nextLine();
         System.out.print("Old email: ");
         String oldEmail = sc.nextLine();
+        System.out.print("Old password: ");
+        String oldPassword = sc.nextLine();
 
-        Account oldAccount = new Account(oldPlatform, oldUsername, oldEmail, "***");
-
-        System.out.println("Enter the new data:");
+        System.out.println("Enter data of new Account:");
         System.out.print("new platform: ");
         String newPlatform = sc.nextLine();
         System.out.print("new username: ");
         String newUsername = sc.nextLine();
         System.out.print("new email: ");
         String newEmail = sc.nextLine();
-        System.out.println("New password: ");
+        System.out.print("New password: ");
         String newPassword = sc.nextLine();
 
-        Account updatedAccount = new Account(newPlatform, newUsername, newEmail, newPassword);
+        Account newAccount = new Account(newPlatform, newUsername, newEmail, newPassword);
 
-        dao.updateAccount(oldAccount, updatedAccount);
+        dao.updateAccount(oldPlatform, oldUsername, oldEmail, oldPassword, newAccount);
     }
 
     public static void deleteAccount(Scanner sc, AccountFileDAO dao){
@@ -104,16 +104,32 @@ public class Main {
         String platform = sc.nextLine();
         System.out.print("Username: ");
         String username = sc.nextLine();
-        System.out.print("email: ");
+        System.out.print("Email: ");
         String email = sc.nextLine();
+        System.out.print("Password: ");
+        String password = sc.nextLine();
 
-        Account deleteAccount = new Account(platform, username, email, "***");
-        dao.deleteAccount(deleteAccount);
+        dao.deleteAccount(platform, username, email, password);
+    }
+
+    public static void setMasterPassword(Scanner sc) {
+        String masterPassword = "";
+
+        while (masterPassword.isEmpty()) {
+            System.out.print("🔐 Enter the Master Password: ");
+            masterPassword = sc.nextLine().trim();
+
+            if (masterPassword.isEmpty()) {
+                System.out.println("❌ Master password cannot be empty. Please try again.");
+            }
+        }
+
+        SessionManager.setMasterPassword(masterPassword);
+        System.out.println("✅ Master password correctly set!");
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String choice;
 
         System.out.println("\tPassVault V1.0\n");
         System.out.println("""
@@ -125,8 +141,9 @@ public class Main {
 
         System.out.println("Would you like to proceed? [Y/n]");
 
+        String choice;
         while(true) {
-            System.out.println(">> ");
+            System.out.print(">> ");
             choice = sc.nextLine();
 
             if (choice.equalsIgnoreCase("n")) {
@@ -134,12 +151,15 @@ public class Main {
                 System.out.println("Exiting...");
                 return;
             } else if (choice.equalsIgnoreCase("y")) {
+                setMasterPassword(sc);
+
                 AccountFileDAO dao = new AccountFileDAO("accounts.txt");
 
                 while(true) {
                     printMenu();
-                    System.out.println("Insert an option: ");
+                    System.out.print(">> ");
                     String option = sc.nextLine();
+                    System.out.println();
 
                     switch(option){
                         case "1":
@@ -162,6 +182,7 @@ public class Main {
                             break;
                         case "0":
                             sc.close();
+                            SessionManager.clearSession();
                             System.out.println("Exiting...");
                             return;
                         default:
