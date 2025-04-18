@@ -86,6 +86,25 @@ public class AccountFileDAO implements AccountDAO {
     }
 
     @Override
+    public List<Account> findByEmail(String email) {
+        List<Account> accounts = getAll();
+        List<Account> matchingAccounts = new ArrayList<>();
+
+        for (Account account : accounts) {
+            if (account.getEmail().equalsIgnoreCase(email)) {
+                matchingAccounts.add(account);
+            }
+        }
+
+        if (matchingAccounts.isEmpty()) {
+            System.out.println("No matching account found with email: " + email);
+        } else {
+            System.out.println(matchingAccounts.size() + " matching accounts have been found with email: " + email);
+        }
+        return matchingAccounts;
+    }
+
+    @Override
     public void deleteAccount(String platform, String username, String email, String password) {
         List<Account> accounts = getAll();
         List<Account> updatedAccounts = new ArrayList<>();

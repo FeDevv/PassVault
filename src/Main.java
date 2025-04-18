@@ -7,10 +7,11 @@ public class Main {
         System.out.println("\n----- MENU -----");
         System.out.println("1. Add new account");
         System.out.println("2. View all accounts");
-        System.out.println("3. Find account by platform");
+        System.out.println("3. Find accounts by platform");
         System.out.println("4. Find accounts by username");
-        System.out.println("5. Update an account");
-        System.out.println("6. Delete an account");
+        System.out.println("5. Find accounts by email");
+        System.out.println("6. Update an account");
+        System.out.println("7. Delete an account");
         System.out.println("0. Exit\n");
     }
 
@@ -63,6 +64,20 @@ public class Main {
         String username = sc.nextLine();
 
         List<Account> matchingAccounts = dao.findByUsername(username);
+
+        if(!matchingAccounts.isEmpty()){
+            System.out.println("List of matching accounts:");
+            for(Account account : matchingAccounts){
+                System.out.println(account);
+            }
+        }
+    }
+
+    public static void findByEmail(Scanner sc, AccountFileDAO dao){
+        System.out.print("Enter the email to filter results: ");
+        String email = sc.nextLine();
+
+        List<Account> matchingAccounts = dao.findByEmail(email);
 
         if(!matchingAccounts.isEmpty()){
             System.out.println("List of matching accounts:");
@@ -175,9 +190,12 @@ public class Main {
                             findByUsername(sc, dao);
                             break;
                         case "5":
-                            updateAccount(sc, dao);
+                            findByEmail(sc, dao);
                             break;
                         case "6":
+                            updateAccount(sc, dao);
+                            break;
+                        case "7":
                             deleteAccount(sc, dao);
                             break;
                         case "0":
