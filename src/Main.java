@@ -95,6 +95,17 @@ public class Main {
         String oldUsername = sc.nextLine();
         System.out.print("Old email: ");
         String oldEmail = sc.nextLine();
+
+        boolean exists = dao.getAll().stream()
+                .anyMatch(acc -> acc.getPlatform().equalsIgnoreCase(oldPlatform)
+                        && acc.getUsername().equalsIgnoreCase(oldUsername)
+                        && acc.getEmail().equalsIgnoreCase(oldEmail));
+
+        if (!exists) {
+            System.out.println("No account found with the given platform, username, and email.");
+            return;
+        }
+
         System.out.print("Old password: ");
         String oldPassword = sc.nextLine();
 
