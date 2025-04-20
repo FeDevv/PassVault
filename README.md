@@ -4,45 +4,45 @@
 ---
 
 ## ✨ Features
-▢ ✅ Store accounts with platform, username, email, and password
-▢ 🔒 AES encryption for passwords (with random IV and salt per encryption)
-▢ 🧠 Master password required only once per session
-▢ 🔐 Secure credential verification
-▢ ✏️ Update existing accounts
-▢ ❌ Securely delete accounts
-▢ 📂 Persistent local file-based storage
+- ▢ ✅ Store accounts with platform, username, email, and password
+- ▢ 🔒 AES encryption for passwords (with random IV and salt per encryption)
+- ▢ 🧠 Master password required only once per session
+- ▢ 🔐 Secure credential verification
+- ▢ ✏️ Update existing accounts
+- ▢ ❌ Securely delete accounts
+- ▢ 📂 Persistent local file-based storage
 
 ---
 
 ## 🛠️ Technologies Used
-◼ Java 17+
-◼ IntelliJ IDEA
-◼ AES with PBKDF2 (HmacSHA256) for key derivation
-◼ Local file system for persistence
+- ◼ Java 17+
+- ◼ IntelliJ IDEA
+- ◼ AES with PBKDF2 (HmacSHA256) for key derivation
+- ◼ Local file system for persistence
 
 ---
 
 ## 🗃️ Project Structure
-● Main.java – Entry point and text-based user interface
-● Account.java – Represents a user account
-● AccountDAO.java – Interface for CRUD operations
-● AccountFileDAO.java – DAO implementation using file storage
-● CryptoUtils.java – AES encryption/decryption logic
-● SessionManager.java – Handles the master password for the session
-● accounts.txt – Stores account data (with encrypted passwords)
+- ● Main.java – Entry point and text-based user interface
+- ● Account.java – Represents a user account
+- ● AccountDAO.java – Interface for CRUD operations
+- ● AccountFileDAO.java – DAO implementation using file storage
+- ● CryptoUtils.java – AES encryption/decryption logic
+- ● SessionManager.java – Handles the master password for the session
+- ● accounts.txt – Stores account data (with encrypted passwords)
 
 ---
 
 ## 🔐 Security Design
-◇ Passwords are never stored in plain text.
-◇ Every encryption generates a unique IV and salt.
-◇ The master password is never saved; it is used only to derive the encryption key at runtime.
-◇ All error messages are intentionally generic to avoid leaking sensitive information (e.g., "account not found" instead of "wrong password").
+- ◇ Passwords are never stored in plain text.
+- ◇ Every encryption generates a unique IV and salt.
+- ◇ The master password is never saved; it is used only to derive the encryption key at runtime.
+- ◇ All error messages are intentionally generic to avoid leaking sensitive information (e.g., "account not found" instead of "wrong password").
 
 ---
 
 ## 👤 Author
-Created with ☕ by Federico B.
+Created with ☕ by Federico Bonucci
 GitHub: FeDevv
 Email: ricobon03@gmail.com
 
