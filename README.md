@@ -42,8 +42,8 @@
 ---
 
 ## 👤 Author
-Created with ☕ by **Federico Bonucci**
-GitHub: [FeDevv]
+Created with ☕ by **Federico Bonucci**  
+GitHub: [FeDevv]  
 Email: [ricobon03@gmail.com]
 
 ---
