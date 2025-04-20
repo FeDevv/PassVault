@@ -26,7 +26,7 @@ public class CryptoUtils {
 
     public static String encrypt(String plainText, String masterPassword) {
         try {
-            byte[] salt = new byte[SALT_SIZE]; // Per futuro uso con PBKDF2
+            byte[] salt = new byte[SALT_SIZE];
             new SecureRandom().nextBytes(salt);
 
             SecretKeySpec key = deriveKey(masterPassword, salt);
