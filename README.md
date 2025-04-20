@@ -43,8 +43,8 @@
 
 ## 👤 Author
 Created with ☕ by **Federico Bonucci**  
-GitHub: [FeDevv]  
-Email: [ricobon03@gmail.com]
+GitHub: FeDevv  
+Email: ricobon03@gmail.com
 
 ---
 
