@@ -66,6 +66,6 @@ public class Account {
 
     @Override
     public String toString() {
-        return "▢ " + getPlatform() + " ⇨ Username: " + getUsername() + " | Email: " + getEmail() + " | password: " + getDecryptedPassword();
+        return "- " + getPlatform() + " | Username: " + getUsername() + " | Email: " + getEmail() + " | password: " + getDecryptedPassword();
     }
 }

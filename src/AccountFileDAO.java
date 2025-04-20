@@ -29,7 +29,7 @@ public class AccountFileDAO implements AccountDAO {
         }catch(IOException e){
             System.err.println("Error while writing to file: " + e.getMessage());
         }
-    }       //salva un account su file --> password viene criptata
+    }
 
     @Override
     public List<Account> getAll() {
@@ -44,7 +44,7 @@ public class AccountFileDAO implements AccountDAO {
             System.err.println("Error while reading file: " + e.getMessage());
         }
         return accounts;
-    }       //prende gli account dal file --> hanno password criptate
+    }
 
     @Override
     public List<Account> findByPlatform(String platform) {
@@ -61,7 +61,7 @@ public class AccountFileDAO implements AccountDAO {
         } else {
             System.out.println(matchingAccounts.size() + " matching accounts have been found with platform: " + platform);
         }
-        // Restituisci una lista vuota se non ci sono account corrispondenti
+
         return matchingAccounts;
     }
 
@@ -81,7 +81,7 @@ public class AccountFileDAO implements AccountDAO {
         } else {
             System.out.println(matchingAccounts.size() + " matching accounts have been found with username: " + username);
         }
-        // Restituisci una lista vuota se non ci sono account corrispondenti
+
         return matchingAccounts;
     }
 
@@ -144,11 +144,11 @@ public class AccountFileDAO implements AccountDAO {
 
         for (Account account : accounts) {
             if (account.matchesCredentials(platform, username, email) && account.verifyPassword(password)) {
-                System.out.println("Account with matching information found. Updating file");// sostituisce quello vecchio
+                System.out.println("Account with matching information found. Updating file");
                 updatedAccounts.add(newAccount);
                 updated = true;
             } else {
-                updatedAccounts.add(account); // mantiene quelli non coinvolti
+                updatedAccounts.add(account);
             }
         }
 

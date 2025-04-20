@@ -142,22 +142,22 @@ public class Main {
         String masterPassword = "";
 
         while (masterPassword.isEmpty()) {
-            System.out.print("🔐 Enter the Master Password: ");
+            System.out.print("Enter the Master Password: ");
             masterPassword = sc.nextLine().trim();
 
             if (masterPassword.isEmpty()) {
-                System.out.println("❌ Master password cannot be empty. Please try again.");
+                System.out.println("Master password cannot be empty. Please try again.");
             }
         }
 
         SessionManager.setMasterPassword(masterPassword);
-        System.out.println("✅ Master password correctly set!");
+        System.out.println("Master password correctly set!");
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("\tPassVault V1.0\n");
+        System.out.println("\t\tPassVault V1.0\n");
         System.out.println("""
                 Thanks for trying PassVault! Please remember that this software is provided for educational and demonstration purposes.\
                 
