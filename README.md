@@ -11,6 +11,7 @@
 - ✏️ Update existing accounts
 - ❌ Securely delete accounts
 - 📂 Persistent local file-based storage
+- Command-line interface
 
 ---
 
@@ -38,6 +39,23 @@
 - Every encryption generates a unique IV and salt.
 - The master password is never saved; it is used only to derive the encryption key at runtime.
 - All error messages are intentionally generic to avoid leaking sensitive information (e.g., "account not found" instead of "wrong password").
+
+---
+
+## ⚠️ File Format Limitation
+
+The application uses a semicolon (`;`) as a delimiter to separate account fields (platform, username, email, encrypted password) when saving data to the file.
+
+**Important:**  
+Do **not** use semicolons (`;`) in any of the following fields:
+
+- Platform  
+- Username  
+- Email  
+- Password  
+
+Using `;` will break file parsing and may cause data corruption or application errors.
+
 
 ---
 
